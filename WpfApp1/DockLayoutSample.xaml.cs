@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WpfApp1
 {
     /// <summary>
-    /// TitleDemoPage.xaml 的交互逻辑
+    /// DockLayoutSample.xaml 的交互逻辑
     /// </summary>
-    public partial class TitleDemoPage : Page
+    public partial class DockLayoutSample : UserControl
     {
-        public TitleDemoPage()
+        public DockLayoutSample()
         {
             InitializeComponent();
         }

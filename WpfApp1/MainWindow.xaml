@@ -27,11 +27,10 @@
             </dxb:ToolBarControl>
         </dx:DXTabItem>
         <dx:DXTabItem Header="Tile">
-            <Frame>
-                <Frame.Content>
-                    <local:TitleDemoPage/>
-                </Frame.Content>
-            </Frame>
+            <local:TileSample/>
+        </dx:DXTabItem>
+        <dx:DXTabItem Header="DockLayout">
+            <local:DockLayoutSample/>
         </dx:DXTabItem>
     </dx:DXTabControl>
 </Window>

@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="WpfApp1.TileSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:TilesViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <dx:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Margin" Value="20"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel>
+        <dxb:ToolBarControl AllowQuickCustomization="False" Background="Black">
+            <dxb:BarSubItem Content="{Binding SelectedItem.Content, ElementName=SampleSelector}">
+                <dxb:BarItemSelector Name="SampleSelector">
+                    <dxb:BarCheckItem Name="Sample1" Content="Sample1"/>
+                    <dxb:BarCheckItem Name="Sample2" Content="Sample2" IsChecked="True"/>
+                </dxb:BarItemSelector>
+            </dxb:BarSubItem>
+        </dxb:ToolBarControl>
+        <Grid Visibility="{Binding IsChecked, ElementName=Sample1, Converter={StaticResource boolToVisibilityConverter}}">
+            <dxlc:TileLayoutControl Padding="10, 10, 0, 0" Height="350">
+                <dxlc:Tile ContentChangeInterval="00:00:03.00" Size="ExtraSmall">
+                    <Image Source="Resources/Images/setup.png"/>
+                </dxlc:Tile>
+                <dxlc:Tile ContentChangeInterval="00:00:03.00" Size="ExtraSmall">
+                    <dxlc:Tile.Header>
+                        <TextBlock Text="Header"/>
+                    </dxlc:Tile.Header>
+                    <dxlc:Tile.ContentSource>
+                        <dx:FrameworkElements>
+                            <Image Source="Resources/Images/checklist.png"/>
+                            <Image Source="Resources/Images/calendar(1).png"/>
+                        </dx:FrameworkElements>
+                    </dxlc:Tile.ContentSource>
+                </dxlc:Tile>
+                <dxlc:Tile Size="Small">
+                    <dxlc:Tile.Header>
+                        <TextBlock Text="Header"/>
+                    </dxlc:Tile.Header>
+                    <dxlc:Tile.Content>
+                        <Image Source="Resources/Images/checklist.png"/>
+                    </dxlc:Tile.Content>
+                </dxlc:Tile>
+            </dxlc:TileLayoutControl>
+        </Grid>
+        <Grid Visibility="{Binding IsChecked, ElementName=Sample2, Converter={StaticResource boolToVisibilityConverter}}">
+            <dxlc:TileLayoutControl Padding="10, 10, 0, 0" ItemsSource="{Binding Tiles}">
+                <dxlc:TileLayoutControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:TileModel}">
+                        <dxlc:Tile ContentSource="{Binding Images, Mode=OneWay}" Size="Small" Header="{Binding ., Mode=OneWay}" Padding="0">
+                            <dxlc:Tile.ContentTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding .}" Stretch="Uniform" Margin="20"/>
+                                </DataTemplate>
+                            </dxlc:Tile.ContentTemplate>
+                            <dxlc:Tile.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type local:TileModel}">
+                                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#44000000">
+                                        <TextBlock Text="{Binding Header}" Margin="5"/>
+                                    </Border>
+                                </DataTemplate>
+                            </dxlc:Tile.HeaderTemplate>
+                        </dxlc:Tile>
+                    </DataTemplate>
+                </dxlc:TileLayoutControl.ItemTemplate>
+            </dxlc:TileLayoutControl>
+        </Grid>
+    </StackPanel>
+</UserControl>
