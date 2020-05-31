@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <Style TargetType="{x:Type dx:DXTabItem}">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
     <dx:DXTabControl>
         <dx:DXTabItem Header="BarCheckItem">
@@ -31,6 +35,9 @@
         </dx:DXTabItem>
         <dx:DXTabItem Header="DockLayout">
             <local:DockLayoutSample/>
+        </dx:DXTabItem>
+        <dx:DXTabItem Header="Diagram">
+            <local:DiagramSample/>
         </dx:DXTabItem>
     </dx:DXTabControl>
 </Window>

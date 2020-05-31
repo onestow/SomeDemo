@@ -27,10 +27,13 @@
         </dxb:ToolBarControl>
         <Grid Visibility="{Binding IsChecked, ElementName=Sample1, Converter={StaticResource boolToVisibilityConverter}}">
             <dxlc:TileLayoutControl Padding="10, 10, 0, 0" Height="350">
-                <dxlc:Tile ContentChangeInterval="00:00:03.00" Size="ExtraSmall">
+                <dxlc:Tile Size="ExtraSmall">
                     <Image Source="Resources/Images/setup.png"/>
                 </dxlc:Tile>
-                <dxlc:Tile ContentChangeInterval="00:00:03.00" Size="ExtraSmall">
+                <dxlc:Tile Size="ExtraLarge">
+                    <Image Source="Resources/Images/setup.png"/>
+                </dxlc:Tile>
+                <dxlc:Tile ContentChangeInterval="00:00:03.00" Size="Small">
                     <dxlc:Tile.Header>
                         <TextBlock Text="Header"/>
                     </dxlc:Tile.Header>
@@ -41,7 +44,7 @@
                         </dx:FrameworkElements>
                     </dxlc:Tile.ContentSource>
                 </dxlc:Tile>
-                <dxlc:Tile Size="Small">
+                <dxlc:Tile Size="Large">
                     <dxlc:Tile.Header>
                         <TextBlock Text="Header"/>
                     </dxlc:Tile.Header>

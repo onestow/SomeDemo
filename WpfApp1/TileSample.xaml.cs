@@ -36,15 +36,15 @@ namespace WpfApp1
         {
             var images = new ImageSource[]
             {
-                new BitmapImage(new Uri("/Resources/Images/calendar(1).png", UriKind.Relative)),
                 new BitmapImage(new Uri("/Resources/Images/checklist.png", UriKind.Relative)),
+                new BitmapImage(new Uri("/Resources/Images/calendar(1).png", UriKind.Relative)),
                 new BitmapImage(new Uri("/Resources/Images/folder.png", UriKind.Relative)),
             };
 
             Tiles = new List<TileModel>
             {
-                new TileModel() { Header = "Header1", Images = images.Take(2).ToList()},
-                new TileModel() { Header = "Header2", Images = images.Skip(2).Take(1).ToList()},
+                new TileModel() { Header = "待办事项: 5" + Environment.NewLine + "紧急指令: 1", Images = images.Take(1).ToList()},
+                new TileModel() { Header = "Header2", Images = images.Skip(1).Take(2).ToList()},
             };
         }
     }
