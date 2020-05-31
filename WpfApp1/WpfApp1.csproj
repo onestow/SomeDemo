@@ -125,7 +125,24 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="dll\DevExpress.Data.v19.2.dll" />
+    <Resource Include="dll\DevExpress.Data.v19.2.xml" />
+    <Content Include="dll\DevExpress.Mvvm.v19.2.dll" />
+    <Resource Include="dll\DevExpress.Mvvm.v19.2.xml" />
+    <Content Include="dll\DevExpress.Pdf.v19.2.Core.dll" />
+    <Resource Include="dll\DevExpress.Pdf.v19.2.Core.xml" />
+    <Content Include="dll\DevExpress.Printing.v19.2.Core.dll" />
+    <Resource Include="dll\DevExpress.Printing.v19.2.Core.xml" />
+    <Content Include="dll\DevExpress.Xpf.Core.v19.2.dll" />
+    <Resource Include="dll\DevExpress.Xpf.Core.v19.2.xml" />
+    <Content Include="dll\DevExpress.Xpf.Docking.v19.2.dll" />
+    <Resource Include="dll\DevExpress.Xpf.Docking.v19.2.xml" />
+    <Content Include="dll\DevExpress.Xpf.Layout.v19.2.Core.dll" />
+    <Resource Include="dll\DevExpress.Xpf.Layout.v19.2.Core.xml" />
+    <Content Include="dll\DevExpress.Xpf.LayoutControl.v19.2.dll" />
+    <Resource Include="dll\DevExpress.Xpf.LayoutControl.v19.2.xml" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\calendar%281%29.png" />
     <Resource Include="Resources\Images\checklist.png" />
