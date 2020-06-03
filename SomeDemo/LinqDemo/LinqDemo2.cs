@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SomeDemo.LinqDemo
@@ -11,15 +12,13 @@ namespace SomeDemo.LinqDemo
     {
         public void Run()
         {
-            string[] strs = new string[] { "Alice", "Jerry", "Tom", "Jim" };
-            var res = strs
-                .Where(s => { Console.WriteLine(s + " where"); return s.StartsWith("J"); })
-                .Select(s => { Console.WriteLine(s + " select"); return s + " --"; })
-                ;
-            foreach (var s in res)
-            {
-                Console.ReadKey(true);
-            }
+            var q = new Queryable<int>();
+
+            var result = from item in q
+                         select item;
+
+            Console.WriteLine(string.Join(Environment.NewLine, result));
+            Console.ReadKey(true);
         }
     }
 
@@ -31,14 +30,24 @@ namespace SomeDemo.LinqDemo
 
         public IQueryProvider Provider { get; }
 
-        public IEnumerator GetEnumerator() => (Provider.Execute(Expression) as IEnumerable).GetEnumerator();
+        //public IEnumerator GetEnumerator() => (Provider.Execute(Expression) as IEnumerable).GetEnumerator();
+        public IEnumerator GetEnumerator() => throw new NotImplementedException();
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => (Provider.Execute(Expression) as IEnumerable<T>).GetEnumerator();
-
-        public Queryable(IQueryProvider provider, Expression expression)
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            Expression = expression;
+            yield return Provider.Execute<T>(Expression);
+        }
+
+        public Queryable(IQueryProvider provider, Expression expression = null)
+        {
+            Expression = expression ?? Expression.Constant(this);
             Provider = provider;
+        }
+
+        public Queryable(Expression expression = null)
+            : this(new QueryProvider(), expression)
+        {
+
         }
     }
 
@@ -46,11 +55,17 @@ namespace SomeDemo.LinqDemo
     {
         public IQueryable CreateQuery(Expression expression)
         {
+            //Console.WriteLine("CreateQuery: " + expression);
+            //return (IQueryable)Activator.CreateInstance(
+            //    typeof(Queryable<>).MakeGenericType(expression.Type),
+            //    new object[] { this, expression }
+            //    );
             throw new NotImplementedException();
         }
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
+            Console.WriteLine("CreateQuery<>: " + expression);
             return new Queryable<TElement>(this, expression);
         }
 
@@ -61,7 +76,8 @@ namespace SomeDemo.LinqDemo
 
         public TResult Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Execute<>: " + expression);
+            return (TResult)(123 as object);
         }
     }
 }
