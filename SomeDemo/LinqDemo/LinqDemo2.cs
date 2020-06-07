@@ -12,12 +12,13 @@ namespace SomeDemo.LinqDemo
     {
         public void Run()
         {
-            var q = new Queryable<int>();
+            var ss = new Queryable<int>();
 
-            var result = from item in q
+            var t = from item in ss
+                         where item == 123
                          select item;
 
-            Console.WriteLine(string.Join(Environment.NewLine, result));
+            Console.WriteLine(t.FirstOrDefault().ToString());
             Console.ReadKey(true);
         }
     }
@@ -66,6 +67,7 @@ namespace SomeDemo.LinqDemo
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
             Console.WriteLine("CreateQuery<>: " + expression);
+            AnalysisExpression(expression);
             return new Queryable<TElement>(this, expression);
         }
 
@@ -78,6 +80,45 @@ namespace SomeDemo.LinqDemo
         {
             Console.WriteLine("Execute<>: " + expression);
             return (TResult)(123 as object);
+        }
+
+        public void AnalysisExpression(Expression exp, int level = 0)
+        {
+            Console.WriteLine("".PadRight(level * 4) + exp.NodeType.ToString().PadRight(10) + ": " + exp);
+            switch (exp.NodeType)
+            {
+                case ExpressionType.Call:
+                    var mce = exp as MethodCallExpression;
+                    //Console.WriteLine("The Method Is {0}", mce.Method.Name);
+                    for (int i = 0; i < mce.Arguments.Count; i++)
+                        AnalysisExpression(mce.Arguments[i], level + 1);
+                    break;
+                case ExpressionType.Quote:
+                    var ue = exp as UnaryExpression;
+                    AnalysisExpression(ue.Operand, level + 1);
+                    break;
+                case ExpressionType.Lambda:
+                    var le = exp as LambdaExpression;
+                    AnalysisExpression(le.Body, level + 1);
+                    break;
+                case ExpressionType.Equal:
+                    var be = exp as BinaryExpression;
+                    //Console.WriteLine("The Method Is {0}", exp.NodeType.ToString());
+                    AnalysisExpression(be.Left, level + 1);
+                    AnalysisExpression(be.Right, level + 1);
+                    break;
+                case ExpressionType.Constant:
+                    var ce = exp as ConstantExpression;
+                    //Console.WriteLine("The Value Type Is {0}", ce.Value.ToString());
+                    break;
+                case ExpressionType.Parameter:
+                    var pe = exp as ParameterExpression;
+                    //Console.WriteLine("The Parameter Is {0}", pe.Name);
+                    break;
+                default:
+                    Console.Write("UnKnow");
+                    break;
+            }
         }
     }
 }
