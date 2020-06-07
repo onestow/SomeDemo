@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DevExpress.Xpo" Version="19.2.5" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
   </ItemGroup>
 
