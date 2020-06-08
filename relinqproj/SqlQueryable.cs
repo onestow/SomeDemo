@@ -8,19 +8,19 @@ using System.Text;
 
 namespace relinqproj
 {
-    class MyQueryable<T> : QueryableBase<T>
+    class SqlQueryable<T> : QueryableBase<T>
     {
-        public MyQueryable(IQueryProvider provider)
+        public SqlQueryable(IQueryProvider provider)
             : base(provider)
         {
         }
 
-        public MyQueryable(IQueryParser parser, IQueryExecutor executor)
+        public SqlQueryable(IQueryParser parser, IQueryExecutor executor)
             : base (parser, executor)
         {
         }
 
-        public MyQueryable(IQueryProvider provider, Expression expression)
+        public SqlQueryable(IQueryProvider provider, Expression expression)
             : base(provider, expression)
         {
         }

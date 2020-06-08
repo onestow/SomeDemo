@@ -6,11 +6,11 @@ using System.Text;
 
 namespace relinqproj
 {
-    class MyQueryableExecutor : IQueryExecutor
+    class SqlQueryableExecutor : IQueryExecutor
     {
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var visitor = new MyQueryableModelVisitor();
+            var visitor = new SqlQueryableModelVisitor();
             yield return (T)(1 as object);
             yield return (T)(2 as object);
             yield return (T)(3 as object);

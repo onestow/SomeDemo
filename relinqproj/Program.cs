@@ -15,17 +15,17 @@ namespace relinqproj
         {
             Console.WriteLine("Hello World!");
 
-            var res0 = from m in new MyQueryable<int>(QueryParser.CreateDefault(), new MyQueryableExecutor())
+            var res0 = from m in new SqlQueryable<int>(QueryParser.CreateDefault(), new SqlQueryableExecutor())
                        where m == 3
                        select m;
             Console.WriteLine(string.Join(", ", res0));
 
-            var res1 = (from m in new MyQueryable<int>(QueryParser.CreateDefault(), new MyQueryableExecutor())
+            var res1 = (from m in new SqlQueryable<int>(QueryParser.CreateDefault(), new SqlQueryableExecutor())
                         where m == 3
                         select m).Count();
             Console.WriteLine(res1.ToString());
 
-            var res2 = (from m in new MyQueryable<int>(QueryParser.CreateDefault(), new MyQueryableExecutor())
+            var res2 = (from m in new SqlQueryable<int>(QueryParser.CreateDefault(), new SqlQueryableExecutor())
                         where m == 3
                         select m).FirstOrDefault();
             Console.WriteLine(res2.ToString());
