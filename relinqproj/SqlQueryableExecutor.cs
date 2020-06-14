@@ -11,11 +11,10 @@ namespace relinqproj
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
             var visitor = new SqlQueryableModelVisitor();
-            yield return (T)(1 as object);
-            yield return (T)(2 as object);
-            yield return (T)(3 as object);
-            yield return (T)(4 as object);
-            yield return (T)(5 as object);
+            visitor.VisitQueryModel(queryModel);
+            var sql = visitor.GetSql();
+            Console.WriteLine("result sql: " + Environment.NewLine + sql);
+            return SqlHelper.Query<T>(sql);
         }
 
         public T ExecuteScalar<T>(QueryModel queryModel)

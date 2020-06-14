@@ -17,9 +17,9 @@ namespace relinqproj
             FromParts.Add($"{querySource.ItemType.Name} {querySource.ItemName}");
         }
 
-        public void AddWherePart(string str, params object[] args)
+        public void AddWherePart(string str)
         {
-            WhereParts.Add(string.Format(str, args));
+            WhereParts.Add(str);
         }
 
         public void AddOrderByPart(IEnumerable<string> orders)
