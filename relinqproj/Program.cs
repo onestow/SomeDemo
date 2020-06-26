@@ -1,11 +1,6 @@
-﻿using Remotion.Linq;
-using Remotion.Linq.Clauses;
-using Remotion.Linq.Parsing.Structure;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 
 namespace relinqproj
 {
@@ -13,9 +8,9 @@ namespace relinqproj
     {
         static void Main(string[] args)
         {
-            var res0 = from m in new SqlQueryable<Person>(QueryParser.CreateDefault(), new SqlQueryableExecutor())
-                       //where m.ID == 2
-                       select m;
+            var res0 = from m in new SqlQueryable<Person>(new SqlQueryableExecutor())
+                       where m.ID == 2 && (m.Name == "Alice" || m.ID == 1)
+                       select m.ID;
 
             Console.WriteLine(string.Join(Environment.NewLine, res0));
 
@@ -34,6 +29,11 @@ namespace relinqproj
 
     class Person
     {
+        public Person(int id, string name)
+        {
+            ID = id;
+            Name = name;
+        }
         public int ID { get; set; }
         public string Name { get; set; }
 

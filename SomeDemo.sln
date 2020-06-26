@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActiveMQDemo", "ActiveMQDem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{770385FB-4F94-4EB3-A726-DC870F8B9635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "relinqproj", "relinqproj\relinqproj.csproj", "{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "relinqproj", "relinqproj\relinqproj.csproj", "{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

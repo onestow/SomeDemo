@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace relinqproj
+namespace relinqproj.Simple
 {
     public class SqlExpressionTreeVisitor : Remotion.Linq.Parsing.ThrowingExpressionVisitor
     {

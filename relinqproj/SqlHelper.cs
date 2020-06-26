@@ -27,19 +27,50 @@ namespace relinqproj
         {
             var inType = typeof(SqliteDataReader);
             var parameterExp = Expression.Parameter(inType, "dataReader");
-            List<MemberBinding> bindings = new List<MemberBinding>();
 
-            var outProps = typeof(Tout).GetProperties().Where(item => item.CanWrite);
-            foreach(var outProp in outProps)
+            Expression finalExp;
+            if (typeof(Tout).IsValueType)//值类型
             {
-                var methodInfo = typeof(DataReaderExtensions).GetMethod("GetFieldValue").MakeGenericMethod(outProp.PropertyType);
-                var callExp = Expression.Call(methodInfo, parameterExp, Expression.Constant(outProp.Name));
-                var binding = Expression.Bind(outProp, callExp);
-                bindings.Add(binding);
+                var methodInfo = inType.GetMethod("GetFieldValue").MakeGenericMethod(typeof(Tout));
+                finalExp = Expression.Call(parameterExp, methodInfo, Expression.Constant(0, typeof(int)));
             }
+            else if (typeof(Tout).GetConstructor(new Type[0]) == null)//针对匿名类
+            {
+                var props = typeof(Tout).GetProperties();
+                var constructor = typeof(Tout).GetConstructor(props.Select(item => item.PropertyType).ToArray())
+                    ?? throw new Exception("datareader转实体失败: 找不到指定参数的构造函数");
 
-            var initExp = Expression.MemberInit(Expression.New(typeof(Tout)), bindings);
-            return Expression.Lambda<Func<SqliteDataReader, Tout>>(initExp, parameterExp).Compile();
+                var argExps = new List<Expression>();
+                foreach(var prop in props)
+                {
+                    var callExp = GetReaderValueExp(prop, parameterExp);
+                    argExps.Add(callExp);
+                }
+
+                finalExp = Expression.New(constructor, argExps);
+            }
+            else//有无参构造函数的类
+            {
+                List<MemberBinding> bindings = new List<MemberBinding>();
+
+                var props = typeof(Tout).GetProperties().Where(item => item.CanWrite);
+                foreach(var outProp in props)
+                {
+                    var callExp = GetReaderValueExp(outProp, parameterExp);
+                    var binding = Expression.Bind(outProp, callExp);
+                    bindings.Add(binding);
+                }
+
+                finalExp = Expression.MemberInit(Expression.New(typeof(Tout)), bindings);
+            }
+            return Expression.Lambda<Func<SqliteDataReader, Tout>>(finalExp, parameterExp).Compile();
+        }
+
+        private static MethodCallExpression GetReaderValueExp(PropertyInfo prop, ParameterExpression parameterExp)
+        {
+            var methodInfo = typeof(DataReaderExtensions).GetMethod("GetFieldValue").MakeGenericMethod(prop.PropertyType);
+            var callExp = Expression.Call(methodInfo, parameterExp, Expression.Constant(prop.Name));
+            return callExp;
         }
     }
 }

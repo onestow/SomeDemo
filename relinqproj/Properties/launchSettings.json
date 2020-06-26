@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "relinqproj": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

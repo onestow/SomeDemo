@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
-namespace relinqproj
+namespace relinqproj.Complex
 {
     class SqlQueryableModelVisitor : QueryModelVisitorBase
     {
@@ -40,7 +40,7 @@ namespace relinqproj
         public override void VisitSelectClause(SelectClause selectClause, QueryModel queryModel)
         {
             Log("VisitSelectClause: " + selectClause, logLevel++);
-            _queryParts.SelectPart = SqlExpressionTreeVisitor.GetSqlExpression(selectClause.Selector) + ".*";
+            _queryParts.SelectPart = SqlExpressionTreeVisitor.GetSqlExpression(selectClause.Selector, ",");
             base.VisitSelectClause(selectClause, queryModel);
             logLevel--;
         }

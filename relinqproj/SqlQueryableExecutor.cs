@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace relinqproj
 {
@@ -10,7 +9,8 @@ namespace relinqproj
     {
         public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var visitor = new SqlQueryableModelVisitor();
+            var visitor = new Complex.SqlQueryableModelVisitor();
+            //var visitor = new Simple.SqlQueryableModelVisitor();
             visitor.VisitQueryModel(queryModel);
             var sql = visitor.GetSql();
             Console.WriteLine("result sql: " + Environment.NewLine + sql);
@@ -29,6 +29,5 @@ namespace relinqproj
                 ? res.SingleOrDefault()
                 : res.Single();
         }
-
     }
 }
