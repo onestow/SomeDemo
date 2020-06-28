@@ -25,8 +25,8 @@ namespace relinqproj
         {
         }
 
-        public SqlQueryable(IQueryExecutor executor)
-            : this(QueryParser.CreateDefault(), executor)
+        public SqlQueryable()
+            : this(QueryParser.CreateDefault(), new SqlQueryableExecutor())
         {
         }
     }

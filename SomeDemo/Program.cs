@@ -13,15 +13,18 @@ namespace SomeDemo
         {
             try
             {
-                //new LinqDemo.LinqDemo2().Run();
-                var res = new Solution().NumDistinct("bag", "g");
-                Assert(res, 1);
-                res = new Solution().NumDistinct("rabbbit", "rabbit");
-                Assert(res, 3);
-                res = new Solution().NumDistinct("babgbag", "bag");
-                Assert(res, 5);
+                var ffff = (5 % -2);
+                var s = new Solution();
+                int r;
+
+                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 10, 6, 7, 8, 9 }, 5), true);
+                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 6 }, 7), true);
+                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 6 }, 10), false);
+                Assert(s.CanArrange(new int[] { -10, 10 }, 2), true);
+                Assert(s.CanArrange(new int[] { -1, 1, -2, 2, -3, 3, -4, 4 }, 3), true);
+
                 var head = new ListNode(new int[] { 1, 2, 3, 4, 5, 6 });
-                var newHead = new Solution().ReverseKGroup(head, 0);
+                var newHead = s.ReverseKGroup(head, 0);
                 Console.WriteLine(newHead.ToString());
             }
             catch (Exception ex)
@@ -41,22 +44,30 @@ namespace SomeDemo
 
     public class Solution
     {
-        public int NumDistinct(string s, string t)
+        public bool CanArrange(int[] arr, int k)
         {
-            var map = new int[s.Length + 1, t.Length + 1];
-            for (int i = 0; i <= s.Length; i++)
-                map[i, t.Length] = 1;
+            var modCnt = new int[k];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                var mod = arr[i] % k;
+                if (mod < 0)
+                    mod += k;
 
-            for(int i = s.Length - 1;i>=0;i--)
-                for(int j = t.Length-1;j>=0;j--)
-                {
-                    if (s[i] != t[j])
-                        map[i, j] = map[i + 1, j];
-                    else
-                        map[i, j] = map[i + 1, j + 1] + map[i + 1, j];
-                }
-            return map[0, 0];
+                modCnt[mod] += 1;
+            }
+
+            if (modCnt[0] % 2 == 1) 
+                return false;
+
+            var halfLen = k / 2;
+            for (int i = 1; i < halfLen; i++)
+            {
+                if (modCnt[i] != modCnt[k - i])
+                    return false;
+            }
+            return true;
         }
+
 
         public ListNode ReverseKGroup(ListNode head, int k)
         {

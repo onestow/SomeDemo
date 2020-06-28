@@ -1,6 +1,7 @@
 ﻿using Remotion.Linq.Clauses.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace relinqproj.Complex
     {
         private StringBuilder sql = new StringBuilder();
         private string separator;
+        private bool isAll = true;
         protected override Exception CreateUnhandledItemException<T>(T unhandledItem, string visitMethod)
         {
             return new NotSupportedException($"The expression '{unhandledItem}' (type: {typeof(T)}) is not supported by this LINQ provider.");
@@ -50,7 +52,15 @@ namespace relinqproj.Complex
         protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
             Log("QuerySourceReference: " + expression, logLevel++);
-            sql.Append(expression.ReferencedQuerySource.ItemName);
+            var source = expression.ReferencedQuerySource;
+            if (isAll)
+            {
+                sql.Append(string.Join(separator, source.ItemType.GetProperties().Select(prop => $"{source.ItemName}.{prop.Name}")))
+                    .Append(separator);
+            }
+            else
+                sql.Append(source.ItemName);
+            isAll = true;
             logLevel--;
             return expression;
         }
@@ -94,6 +104,7 @@ namespace relinqproj.Complex
         protected override Expression VisitMember(MemberExpression expression)
         {
             Log("Member: " + expression, logLevel++);
+            isAll = false;
             Visit(expression.Expression);
             logLevel--;
             sql.Append("." + expression.Member.Name + separator);

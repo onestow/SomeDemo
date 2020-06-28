@@ -53,13 +53,6 @@ namespace relinqproj.Simple
             logLevel--;
         }
 
-        protected override void VisitBodyClauses(ObservableCollection<IBodyClause> bodyClauses, QueryModel queryModel)
-        {
-            Log("VisitBodyClauses: " + bodyClauses, logLevel++);
-            base.VisitBodyClauses(bodyClauses, queryModel);
-            logLevel--;
-        }
-
         protected override void VisitResultOperators(ObservableCollection<ResultOperatorBase> resultOperators, QueryModel queryModel)
         {
             Log("VisitResultOperators: " + resultOperators, logLevel++);
