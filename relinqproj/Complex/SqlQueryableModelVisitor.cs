@@ -71,7 +71,9 @@ namespace relinqproj.Complex
         public override void VisitOrderByClause(OrderByClause orderByClause, QueryModel queryModel, int index)
         {
             Log($"VisitOrderByClause({index}): " + orderByClause, logLevel++);
-            _queryParts.AddOrderByPart(orderByClause.Orderings.Select(item => SqlExpressionTreeVisitor.GetSqlExpression(item.Expression)));
+
+            var orderings = orderByClause.Orderings;
+            _queryParts.AddOrderByPart(orderings.Select(item => SqlExpressionTreeVisitor.GetSqlExpression(item.Expression) + " " + item.OrderingDirection));
             base.VisitOrderByClause(orderByClause, queryModel, index);
             logLevel--;
         }
@@ -83,6 +85,22 @@ namespace relinqproj.Complex
             _queryParts.AddWherePart($"({SqlExpressionTreeVisitor.GetSqlExpression(joinClause.OuterKeySelector)} = {SqlExpressionTreeVisitor.GetSqlExpression(joinClause.InnerKeySelector)})");
             base.VisitJoinClause(joinClause, queryModel, index);
             logLevel--;
+        }
+
+        public override void VisitGroupJoinClause(GroupJoinClause groupJoinClause, QueryModel queryModel, int index)
+        {
+            base.VisitGroupJoinClause(groupJoinClause, queryModel, index);
+        }
+
+        public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, GroupJoinClause groupJoinClause)
+        {
+            base.VisitJoinClause(joinClause, queryModel, groupJoinClause);
+        }
+
+        public override void VisitAdditionalFromClause(AdditionalFromClause fromClause, QueryModel queryModel, int index)
+        {
+            _queryParts.AddFromPart(fromClause);
+            base.VisitAdditionalFromClause(fromClause, queryModel, index);
         }
 
         private void Log(string msg, int level)

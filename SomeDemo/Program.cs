@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SomeDemo
@@ -13,15 +15,19 @@ namespace SomeDemo
         {
             try
             {
-                var ffff = (5 % -2);
                 var s = new Solution();
                 int r;
 
-                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 10, 6, 7, 8, 9 }, 5), true);
-                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 6 }, 7), true);
-                Assert(s.CanArrange(new int[] { 1, 2, 3, 4, 5, 6 }, 10), false);
-                Assert(s.CanArrange(new int[] { -10, 10 }, 2), true);
-                Assert(s.CanArrange(new int[] { -1, 1, -2, 2, -3, 3, -4, 4 }, 3), true);
+                r = s.FindKthLargest(new int[] { 5, 3, 5, 4 }, 3);
+                Assert(r, 4);
+                r = s.FindKthLargest(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4);
+                Assert(r, 4);
+                r = s.FindKthLargest(new int[] { 3, 2, 1, 5, 6, 4 }, 2);
+                Assert(r, 5);
+                r = s.FindKthLargest(new int[] { 5, 7, 3, 1, 6, 9 }, 4);
+                Assert(r, 5);
+                r = s.FindKthLargest(new int[] { 7, 6, 5, 4, 3, 2, 1 }, 5);
+                Assert(r, 3);
 
                 var head = new ListNode(new int[] { 1, 2, 3, 4, 5, 6 });
                 var newHead = s.ReverseKGroup(head, 0);
@@ -44,30 +50,71 @@ namespace SomeDemo
 
     public class Solution
     {
-        public bool CanArrange(int[] arr, int k)
+        Random random = new Random((int)DateTime.Now.Ticks);
+        public int FindKthLargest(int[] nums, int k)
         {
-            var modCnt = new int[k];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                var mod = arr[i] % k;
-                if (mod < 0)
-                    mod += k;
-
-                modCnt[mod] += 1;
-            }
-
-            if (modCnt[0] % 2 == 1) 
-                return false;
-
-            var halfLen = k / 2;
-            for (int i = 1; i < halfLen; i++)
-            {
-                if (modCnt[i] != modCnt[k - i])
-                    return false;
-            }
-            return true;
+            return PartQuickSort(nums, 0, nums.Length, k - 1);
         }
 
+        private int PartQuickSort(int[] nums, int si, int len, int k)
+        {
+            if (si == k && len == 1)
+                return nums[si];
+            var bi = random.Next(si, si + len);
+            var bv = nums[bi];
+            int i = si, j = si + len - 1;
+            while (i <= j)
+            {
+                while (bi <= j && nums[j] <= bv) j--;
+                if (bi <= j)
+                {
+                    nums[bi] = nums[j];
+                    bi = j;
+                }
+                while (i <= bi && nums[i] >= bv) i++;
+                if (i <= bi)
+                {
+                    nums[bi] = nums[i];
+                    bi = i;
+                }
+            }
+            if (bi == k)
+                return bv;
+            nums[bi] = bv;
+
+            if (bi > k)
+                return PartQuickSort(nums, si, bi - si, k);
+            else
+                return PartQuickSort(nums, bi + 1, len - bi + si - 1, k);
+        }
+
+        private void QuickSort(int[] nums, int si, int len)
+        {
+            if (len < 2)
+                return;
+            var bi = random.Next(si, si + len);
+            var bv = nums[bi];
+            int i = si, j = si + len - 1;
+            while (i <= j)
+            {
+                while (bi <= j && nums[j] <= bv) j--;
+                if (bi <= j)
+                {
+                    nums[bi] = nums[j];
+                    bi = j;
+                }
+                while (i <= bi && nums[i] >= bv) i++;
+                if (i <= bi)
+                {
+                    nums[bi] = nums[i];
+                    bi = i;
+                }
+            }
+            nums[bi] = bv;
+
+            QuickSort(nums, si, bi - si);
+            QuickSort(nums, bi + 1, len - bi + si - 1);
+        }
 
         public ListNode ReverseKGroup(ListNode head, int k)
         {
