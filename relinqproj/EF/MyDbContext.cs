@@ -44,7 +44,6 @@ namespace relinqproj.EF
                     && logLevel == LogLevel.Information)
             {
                 var logContent = formatter(state, exception);
-                //TODO: 拿到日志内容想怎么玩就怎么玩吧
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(logContent);

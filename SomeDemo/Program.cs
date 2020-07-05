@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SomeDemo
 {
@@ -15,21 +17,52 @@ namespace SomeDemo
         {
             try
             {
+                var c = "".FirstOrDefault();
                 var s = new Solution();
-                int r;
-
-                r = s.FindKthLargest(new int[] { 5, 3, 5, 4 }, 3);
-                Assert(r, 4);
-                r = s.FindKthLargest(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4);
-                Assert(r, 4);
-                r = s.FindKthLargest(new int[] { 3, 2, 1, 5, 6, 4 }, 2);
-                Assert(r, 5);
-                r = s.FindKthLargest(new int[] { 5, 7, 3, 1, 6, 9 }, 4);
-                Assert(r, 5);
-                r = s.FindKthLargest(new int[] { 7, 6, 5, 4, 3, 2, 1 }, 5);
-                Assert(r, 3);
-
-                var head = new ListNode(new int[] { 1, 2, 3, 4, 5, 6 });
+                bool t;
+                t = s.IsMatch("abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb",
+"**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb");
+                Assert(t, true);
+                t = s.IsMatch("b",
+                              "?*?");
+                Assert(t, false);
+                t = s.IsMatch("leetcode",
+                              "*e*t?d*");
+                Assert(t, false);
+                t = s.IsMatch("aab", "*a*?a*");
+                Assert(t, false);
+                t = s.IsMatch("sissip",
+                              "*ss*?i*");
+                Assert(t, false);
+                t = s.IsMatch("abab", "abab");
+                Assert(t, true);
+                t = s.IsMatch("abab", "abab*");
+                Assert(t, true);
+                t = s.IsMatch("abab", "*abab");
+                Assert(t, true);
+                t = s.IsMatch("abab", "a*b*b");
+                Assert(t, true);
+                t = s.IsMatch("abab", "a*b");
+                Assert(t, true);
+                t = s.IsMatch("abab", "a*");
+                Assert(t, true);
+                t = s.IsMatch("abab", "*b");
+                Assert(t, true);
+                t = s.IsMatch("abab", "a");
+                Assert(t, false);
+                t = s.IsMatch("abab", "ab");
+                Assert(t, false);
+                t = s.IsMatch("aabab", "**b**b**");
+                Assert(t, true);
+                t = s.IsMatch("aabab", "?ab*b*");
+                Assert(t, true);
+                t = s.IsMatch("aabab", "*b*b*");
+                Assert(t, true);
+                t = s.IsMatch("aaaabaaaabbbbaabbbaabbaababbabbaaaababaaabbbbbbaabbbabababbaaabaabaaaaaabbaabbbbaababbababaabbbaababbbba", "*****b*aba***babaa*bbaba***a*aaba*b*aa**a*b**ba***a*a*");
+                Assert(t, true);
+                t = s.IsMatch("babbbbaabababaabbababaababaabbaabababbaaababbababaaaaaabbabaaaabababbabbababbbaaaababbbabbbbbbbbbbaabbb", "b**bb**a**bba*b**a*bbb**aba***babbb*aa****aabb*bbb***a");
+                Assert(t, false);
+                var head = new ListNode(new int[] { 1, 2, 3, 4, 5 });
                 var newHead = s.ReverseKGroup(head, 0);
                 Console.WriteLine(newHead.ToString());
             }
@@ -48,8 +81,129 @@ namespace SomeDemo
         }
     }
 
+
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int x) { val = x; }
+    }
+
+
     public class Solution
     {
+        public bool IsMatchByRegex(string s, string p)
+        {
+            p = "^" + p.Replace("**", "*").Replace("**", "*").Replace("*", "[a-z]*").Replace("?", "[a-z]") + "$";
+            return Regex.IsMatch(s, p, RegexOptions.None);
+        }
+
+        public bool IsMatch(string s, string p)
+        {
+            if (s.Length == 0 && p.Length == 0)
+                return true;
+            if (p.Length == 0)
+                return false;
+            var ps = p.Split('*');
+
+            if (p[0] != '*')//去头
+            {
+                if (!StartWith(s, 0, ps[0]))
+                    return false;
+                s = s.Substring(ps[0].Length);
+                ps = ps.Skip(1).ToArray();
+                if (ps.Length == 0 && s.Length > 0)
+                    return false;
+            }
+            if (p.Last() != '*' && ps.Length > 0)//去尾
+            {
+                var lastP = ps.Last();
+                if (!StartWith(s, s.Length - lastP.Length, lastP))
+                    return false;
+                s = s.Substring(0, s.Length - lastP.Length);
+                ps = ps.Take(ps.Length - 1).ToArray();
+            }
+            ps = ps.Where(item => item != "").ToArray();
+            Map = new int[s.Length, ps.Length];
+            return DFS(s, 0, ps, 0);
+        }
+
+        int[,] Map;
+
+        private bool DFS(string s, int si, string[] ps, int psi)
+        {
+            if (ps.Length == psi)
+                return true;
+            if (s.Length == si)
+                return false;
+            if (Map[si, psi] != 0)
+                return Map[si, psi] > 0;
+            var listSi = FindIndexes(s, si, ps[psi]);
+            for (int i = 0; i < listSi.Count; i++)
+            {
+                if (DFS(s, listSi[i] + ps[psi].Length, ps, psi + 1))
+                {
+                    Map[si, psi] = 1;
+                    return true;
+                }
+            }
+            Map[si, psi] = -1;
+            return false;
+        }
+
+        private List<int> FindIndexes(string s, int si, string p)
+        {
+            var indexes = new List<int>();
+            for (int i = si; i <= s.Length - p.Length; i++)
+                if (StartWith(s, i, p))
+                    indexes.Add(i);
+            return indexes;
+        }
+
+        private bool StartWith(string s, int si, string p)
+        {
+            if (p.Length > s.Length - si || si < 0 || si >= s.Length)
+                return false;
+            for (int pi = 0; pi < p.Length; pi++)
+            {
+                if (p[pi] == '?' || s[si] == p[pi])
+                    si += 1;
+                else
+                    return false;
+            }
+            return true;
+        }
+
+        public int KthSmallest(int[][] matrix, int k)
+        {
+            var arr = new int[matrix.Length * matrix[0].Length];
+            int index = 0;
+            for (int i = 0; i < matrix.Length; i++)
+                for (int j = 0; j < matrix[0].Length; j++)
+                    arr[index++] = matrix[i][j];
+            Array.Sort(arr);
+            return arr[k - 1];
+        }
+        public int FindLength(int[] A, int[] B)
+        {
+            int max = 0;
+            var map = new int[B.Length + 1];
+            for (int i = A.Length - 1; i >= 0; i--)
+                for (int j = 0; j < B.Length; j++)
+                {
+                    if (A[i] == B[j])
+                    {
+                        map[j] = 1 + map[j + 1];
+                        if (max < map[j])
+                            max = map[j];
+                    }
+                    else
+                        map[j] = 0;
+                }
+            return max;
+        }
+
         Random random = new Random((int)DateTime.Now.Ticks);
         public int FindKthLargest(int[] nums, int k)
         {

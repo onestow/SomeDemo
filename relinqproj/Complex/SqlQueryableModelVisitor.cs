@@ -1,5 +1,7 @@
 ﻿using Remotion.Linq;
 using Remotion.Linq.Clauses;
+using Remotion.Linq.Clauses.Expressions;
+using Remotion.Linq.Clauses.ResultOperators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,11 +55,9 @@ namespace relinqproj.Complex
             logLevel--;
         }
 
-        protected override void VisitResultOperators(ObservableCollection<ResultOperatorBase> resultOperators, QueryModel queryModel)
+        public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
         {
-            Log("VisitResultOperators: " + resultOperators, logLevel++);
-            base.VisitResultOperators(resultOperators, queryModel);
-            logLevel--;
+            base.VisitResultOperator(resultOperator, queryModel, index);
         }
 
         public override void VisitWhereClause(WhereClause whereClause, QueryModel queryModel, int index)
@@ -81,26 +81,55 @@ namespace relinqproj.Complex
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, int index)
         {
             Log($"VisitJoinClause({index}): " + joinClause, logLevel++);
-            _queryParts.AddFromPart(joinClause);
-            _queryParts.AddWherePart($"({SqlExpressionTreeVisitor.GetSqlExpression(joinClause.OuterKeySelector)} = {SqlExpressionTreeVisitor.GetSqlExpression(joinClause.InnerKeySelector)})");
+            _queryParts.AddJoinPart("inner", joinClause, GetFilter(joinClause));
             base.VisitJoinClause(joinClause, queryModel, index);
             logLevel--;
         }
 
-        public override void VisitGroupJoinClause(GroupJoinClause groupJoinClause, QueryModel queryModel, int index)
-        {
-            base.VisitGroupJoinClause(groupJoinClause, queryModel, index);
-        }
-
+        Dictionary<string, GroupJoinClause> dictGroupJoin = new Dictionary<string, GroupJoinClause>();
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, GroupJoinClause groupJoinClause)
         {
+            dictGroupJoin.Add(groupJoinClause.ItemName, groupJoinClause);
             base.VisitJoinClause(joinClause, queryModel, groupJoinClause);
         }
 
         public override void VisitAdditionalFromClause(AdditionalFromClause fromClause, QueryModel queryModel, int index)
         {
-            _queryParts.AddFromPart(fromClause);
+            string joinType;
+            if (fromClause.FromExpression is ConstantExpression)
+            {
+                joinType = "cross";
+                _queryParts.AddJoinPart(joinType, fromClause);
+            }
+            else
+            {
+                QuerySourceReferenceExpression qsrExp;
+                if (fromClause.FromExpression is SubQueryExpression sqExp)
+                {
+                    if (sqExp.QueryModel.ResultOperators.Count != 1 || !(sqExp.QueryModel.ResultOperators.First() is DefaultIfEmptyResultOperator))
+                        throw new MethodAccessException("from语句中只能使用DefaultIfEmpty方法");
+                    joinType = "left";
+                    qsrExp = sqExp.QueryModel.MainFromClause.FromExpression as QuerySourceReferenceExpression;
+                }
+                else
+                {
+                    joinType = "inner";
+                    qsrExp = fromClause.FromExpression as QuerySourceReferenceExpression;
+                }
+                if (qsrExp == null)
+                    throw new Exception("无法获取QuerySourceReferenceExpression");
+                var joinClause = dictGroupJoin[qsrExp.ReferencedQuerySource.ItemName].JoinClause;
+                var strFilter = GetFilter(joinClause);
+                _queryParts.AddJoinPart(joinType, fromClause, strFilter);
+            }
             base.VisitAdditionalFromClause(fromClause, queryModel, index);
+        }
+
+        private string GetFilter(JoinClause joinClause)
+        {
+            //TODO
+            var filter = $"({SqlExpressionTreeVisitor.GetSqlExpression(joinClause.OuterKeySelector)} = {SqlExpressionTreeVisitor.GetSqlExpression(joinClause.InnerKeySelector)})";
+            return filter;
         }
 
         private void Log(string msg, int level)

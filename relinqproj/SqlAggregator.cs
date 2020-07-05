@@ -11,6 +11,7 @@ namespace relinqproj
         private List<string> FromParts { get; set; } = new List<string>();
         private List<string> WhereParts { get; set; } = new List<string>();
         private List<string> OrderByParts { get; set; } = new List<string>();
+        private List<string> JoinParts { get; set; } = new List<string>();
 
         public void AddFromPart(IQuerySource querySource)
         {
@@ -27,6 +28,19 @@ namespace relinqproj
             OrderByParts.Insert(0, string.Join(", ", orders));
         }
 
+        public void AddJoinPart(string joinType, IQuerySource querySource, string filter = null)
+        {
+            AddJoinPart(joinType, querySource.ItemType.Name, querySource.ItemName, filter);
+        }
+
+        public void AddJoinPart(string joinType, string tableName, string shortName, string filter = null)
+        {
+            var strJoin = $"{joinType} join {tableName} {shortName}";
+            if (!string.IsNullOrWhiteSpace(filter))
+                strJoin += " on " + filter;
+            JoinParts.Add(strJoin);
+        }
+
         public string GetSql()
         {
             if (string.IsNullOrWhiteSpace(SelectPart) || FromParts.Count == 0)
@@ -34,7 +48,8 @@ namespace relinqproj
 
             var sql = $@"
 select {SelectPart}
-  from {string.Join(", ", FromParts)}";
+  from {string.Join(", ", FromParts)}
+ {string.Join(Environment.NewLine, JoinParts)}";
             if (WhereParts.Count > 0)
                 sql += Environment.NewLine + " where " + string.Join(" and ", WhereParts);
             if (OrderByParts.Count > 0)
