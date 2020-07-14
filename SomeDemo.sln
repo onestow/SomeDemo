@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "relinqproj", "relinqproj\relinqproj.csproj", "{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCode", "LeetCode\LeetCode.csproj", "{35FBD4A4-C742-4735-ACE1-A3CA63E5A05A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5EF31D3-D903-4841-A7A8-2EDEFBE2778B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35FBD4A4-C742-4735-ACE1-A3CA63E5A05A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35FBD4A4-C742-4735-ACE1-A3CA63E5A05A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35FBD4A4-C742-4735-ACE1-A3CA63E5A05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35FBD4A4-C742-4735-ACE1-A3CA63E5A05A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
