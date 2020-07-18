@@ -19,9 +19,9 @@ namespace relinqproj
                        join c1 in new SqlQueryable<Course>() on m.ID equals c1.PersonID into grd1
                        from g in grd.DefaultIfEmpty()
                        from g1 in grd1
-                       from g2 in test
+                       //from g2 in test
                        where m.ID == 1 && (m.Name == "Alice" || m.ID == 1)
-                       select new { m.ID, m, g };
+                       select new { m.ID, m, g, g1 };
                        //select m.Name;
                        //select new { A = m.ID, B = m.Name, C = c.CourseName, D = c.ID };
                        //select new { m.ID, m.Name };

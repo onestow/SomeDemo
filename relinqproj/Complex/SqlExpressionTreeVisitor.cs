@@ -55,11 +55,11 @@ namespace relinqproj.Complex
             var source = expression.ReferencedQuerySource;
             if (isAll)
             {
-                sql.Append(string.Join(separator, source.ItemType.GetProperties().Select(prop => $"{source.ItemName}.{prop.Name}")))
+                sql.Append(string.Join(separator, source.ItemType.GetProperties().Select(prop => $"\"{source.ItemName}\".\"{prop.Name}\"")))
                     .Append(separator);
             }
             else
-                sql.Append(source.ItemName);
+                sql.Append("\"" + source.ItemName + "\"");
             isAll = true;
             logLevel--;
             return expression;
@@ -107,7 +107,7 @@ namespace relinqproj.Complex
             isAll = false;
             Visit(expression.Expression);
             logLevel--;
-            sql.Append("." + expression.Member.Name + separator);
+            sql.Append($".\"{expression.Member.Name}\"{separator}");
             return expression;
         }
 

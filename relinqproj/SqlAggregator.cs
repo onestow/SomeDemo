@@ -15,7 +15,7 @@ namespace relinqproj
 
         public void AddFromPart(IQuerySource querySource)
         {
-            FromParts.Add($"{querySource.ItemType.Name} {querySource.ItemName}");
+            FromParts.Add($"\"{querySource.ItemType.Name}\" \"{querySource.ItemName}\"");
         }
 
         public void AddWherePart(string str)
@@ -35,7 +35,7 @@ namespace relinqproj
 
         public void AddJoinPart(string joinType, string tableName, string shortName, string filter = null)
         {
-            var strJoin = $"{joinType} join {tableName} {shortName}";
+            var strJoin = $"{joinType} join \"{tableName}\" \"{shortName}\"";
             if (!string.IsNullOrWhiteSpace(filter))
                 strJoin += " on " + filter;
             JoinParts.Add(strJoin);

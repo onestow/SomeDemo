@@ -119,16 +119,18 @@ namespace relinqproj.Complex
                 if (qsrExp == null)
                     throw new Exception("无法获取QuerySourceReferenceExpression");
                 var joinClause = dictGroupJoin[qsrExp.ReferencedQuerySource.ItemName].JoinClause;
-                var strFilter = GetFilter(joinClause);
+                var strFilter = GetFilter(joinClause, fromClause.ItemName);
                 _queryParts.AddJoinPart(joinType, fromClause, strFilter);
             }
             base.VisitAdditionalFromClause(fromClause, queryModel, index);
         }
 
-        private string GetFilter(JoinClause joinClause)
+        private string GetFilter(JoinClause joinClause, string newItemName = null)
         {
             //TODO
             var filter = $"({SqlExpressionTreeVisitor.GetSqlExpression(joinClause.OuterKeySelector)} = {SqlExpressionTreeVisitor.GetSqlExpression(joinClause.InnerKeySelector)})";
+            if (newItemName != null)
+                filter = filter.Replace($"\"{joinClause.ItemName}\".", $"\"{newItemName}\".");
             return filter;
         }
 
