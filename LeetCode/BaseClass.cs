@@ -30,4 +30,30 @@ namespace LeetCode
 
         public abstract void Run();
     }
+
+
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+        public override string ToString()
+        {
+            return Dfs(this);
+        }
+
+        private string Dfs(TreeNode node)
+        {
+            if (node == null)
+                return "_";
+            var str = node.val + " " + Dfs(node.left) + " " + Dfs(node.right) + " ";
+            return str;
+        }
+    }
 }
