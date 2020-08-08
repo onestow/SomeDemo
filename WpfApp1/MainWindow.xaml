@@ -12,8 +12,53 @@
             <Setter Property="Width" Value="100"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
+
+        <Style TargetType="ListBox">
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border CornerRadius="4" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Border Name="myBorder" BorderThickness="0" CornerRadius="4" Background="{TemplateBinding Background}" Margin="1"/>
+                                <ItemsPresenter>
+                                    <ItemsPresenter.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=myBorder}"/>
+                                    </ItemsPresenter.OpacityMask>
+                                </ItemsPresenter>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <dx:DXTabControl>
+    <Grid Background="#282828">
+        <ListBox Background="#464646" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="210" Foreground="White">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Width" Value="30"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <!--<Setter Property="Background" Value="Red"/>-->
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBoxItem Content="1"/>
+            <ListBoxItem Content="2"/>
+            <ListBoxItem Content="3"/>
+            <ListBoxItem Content="4"/>
+            <ListBoxItem Content="5"/>
+            <ListBoxItem Content="6"/>
+            <ListBoxItem Content="7"/>
+        </ListBox>
+        <!--<dx:DXTabControl>
         <dx:DXTabItem Header="BarCheckItem">
             <dxb:ToolBarControl>
                 <dxb:BarItemSelector>
@@ -43,43 +88,10 @@
         <dx:DXTabItem Header="Other">
             <Grid Background="#565656">
                 <StackPanel>
-                    <dxe:TextEdit x:Name="te" Width="100" Height="20" Template="{DynamicResource TextEditControlTemplate1}">
-                        <dxe:TextEdit.Resources>
-                            <Style TargetType="dxe:TextEdit">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="#FFFFFF"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                            </Style>
-                            <ControlTemplate x:Key="TextEditControlTemplate1" TargetType="{x:Type dxe:TextEdit}">
-                                <ContentControl x:Name="PART_Root" Focusable="False" dx:FocusHelper2.Focusable="False" HorizontalContentAlignment="Stretch" Custom:ControlHelper.IsReadOnly="{TemplateBinding IsReadOnly}" Custom:ControlHelper.ShowFocusedState="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource TemplatedParent}}" dx:BlendHelper2.ThemeInfo="DevExpress.Xpf.Core\DevExpress.Xpf.Core\Editors\Themes\Generic\TextEdit.xaml;55;6"  VerticalContentAlignment="Stretch">
-                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="5">
-                                        <Grid SnapsToDevicePixels="True" dx:BlendHelper2.ThemeInfo="DevExpress.Xpf.Core\DevExpress.Xpf.Core\Editors\Themes\Generic\TextEdit.xaml;56;8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <dxe:ErrorControl x:Name="PART_ErrorPresenter" dx:BlendHelper2.ThemeInfo="DevExpress.Xpf.Core\DevExpress.Xpf.Core\Editors\Themes\Generic\TextEdit.xaml;61;10"/>
-                                            <dxe:EditorControl x:Name="PART_Content" Grid.Column="1" Focusable="False" dx:BlendHelper2.ThemeInfo="DevExpress.Xpf.Core\DevExpress.Xpf.Core\Editors\Themes\Generic\TextEdit.xaml;62;10" Template="{TemplateBinding ActualEditorControlTemplate}"/>
-                                        </Grid>
-                                    </Border>
-                                </ContentControl>
-                                <ControlTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding ShowBorder, RelativeSource={RelativeSource Self}}" Value="true">
-                                        <Setter Property="dx:WpfSvgPalette.Palette" TargetName="PART_ErrorPresenter" Value="{DynamicResource {Custom1:InplaceBaseEditThemeKey ResourceKey=ValidationErrorSvgPalette, ThemeName=Office2016White}}"/>
-                                    </DataTrigger>
-                                    <!--<Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#888888"/>
-                                </Trigger>-->
-                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                        <Setter Property="BorderBrush" Value="Red"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </dxe:TextEdit.Resources>
-                    </dxe:TextEdit>
                     <Button Height="20" Click="Button_Click"/>
                 </StackPanel>
             </Grid>
         </dx:DXTabItem>
-    </dx:DXTabControl>
+    </dx:DXTabControl>-->
+    </Grid>
 </Window>
