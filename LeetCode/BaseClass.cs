@@ -52,7 +52,8 @@ namespace LeetCode
         {
             if (node == null)
                 return "_";
-            var str = node.val + " " + Dfs(node.left) + " " + Dfs(node.right) + " ";
+            //var str = string.Join(" ", new string[] { Dfs(node.left), node.val.ToString(), Dfs(node.right) });
+            var str = string.Join(" ", new string[] { node.val.ToString(), Dfs(node.left), Dfs(node.right) });
             return str;
         }
     }
