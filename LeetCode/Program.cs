@@ -6,7 +6,7 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            new _99().Run();
+            new _93().Run();
         }
     }
 }
