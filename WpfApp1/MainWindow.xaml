@@ -33,8 +33,8 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Background="#282828">
-        <ListBox Background="#464646" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="210" Foreground="White">
+    <StackPanel Background="#282828">
+        <ListBox Background="#464646" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -47,7 +47,6 @@
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
                     <Setter Property="BorderBrush" Value="White"/>
-                    <!--<Setter Property="Background" Value="Red"/>-->
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBoxItem Content="1"/>
@@ -93,5 +92,5 @@
             </Grid>
         </dx:DXTabItem>
     </dx:DXTabControl>-->
-    </Grid>
+    </StackPanel>
 </Window>

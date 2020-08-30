@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace LeetCode
+namespace LeetCode.problems
 {
     class Program
     {
         static void Main(string[] args)
         {
-            new _93().Run();
+            BaseClass.GetInst().Run();
         }
     }
 }
