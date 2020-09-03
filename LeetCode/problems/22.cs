@@ -10,6 +10,7 @@ namespace LeetCode.problems
         public override void Run()
         {
             var ans = GenerateParenthesis(0);
+            Console.WriteLine("Pl");
         }
 
         List<string> ans;
