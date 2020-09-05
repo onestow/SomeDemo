@@ -9,7 +9,7 @@ namespace LeetCode.problems
     {
         public static BaseClass GetInst()
         {
-            return new _剑指Offer20();
+            return new _60();
         }
         protected virtual void Assert<T>(T o1, T o2)
         {
