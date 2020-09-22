@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace LeetCode.problems
@@ -9,36 +8,29 @@ namespace LeetCode.problems
     {
         public override void Run()
         {
-            var t = CombinationSum2(new int[] { 2, 5, 2, 1, 2 }, 5);
+            for (int i = 1; i <= 5; i++)
+                Console.WriteLine(CountAndSay(i));
+            Console.ReadKey();
         }
 
-        public IList<IList<int>> CombinationSum2(int[] candidates, int target)
+        public string CountAndSay(int n)
         {
-            ans = new List<IList<int>>();
-            oneAns = new int[target];
-            Array.Sort(candidates);
-            dfs(candidates, 0, 0, target);
+            string ans = "1";
+            for (int ni = 1; ni < n; ni++)
+            {
+                var sb = new StringBuilder();
+                int si = 0, i = 1;
+                while (si < ans.Length)
+                {
+                    while (i < ans.Length && ans[si] == ans[i])
+                        i++;
+                    sb.Append((i - si).ToString() + ans[si]);
+                    si = i;
+                    i += 1;
+                }
+                ans = sb.ToString();
+            }
             return ans;
-        }
-
-
-        List<IList<int>> ans;
-        int[] oneAns;
-        private void dfs(int[] arr, int si, int ai, int t)
-        {
-            if (t <= 0)
-            {
-                if (t == 0)
-                    ans.Add(oneAns.Take(ai).ToArray());
-                return;
-            }
-            for (int i = si; i < arr.Length; i++)
-            {
-                if (i > si && arr[i] == arr[i - 1])
-                    continue;
-                oneAns[ai] = arr[i];
-                dfs(arr, i + 1, ai + 1, t - arr[i]);
-            }
         }
     }
 }

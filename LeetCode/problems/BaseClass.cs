@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LeetCode.problems
@@ -9,7 +10,7 @@ namespace LeetCode.problems
     {
         public static BaseClass GetInst()
         {
-            return new _38();
+            return new _968();
         }
         protected virtual void Assert<T>(T o1, T o2)
         {
@@ -59,6 +60,32 @@ namespace LeetCode.problems
             //var str = string.Join(" ", new string[] { Dfs(node.left), node.val.ToString(), Dfs(node.right) });
             var str = string.Join(" ", new string[] { node.val.ToString(), Dfs(node.left), Dfs(node.right) });
             return str;
+        }
+
+        public static TreeNode BuildTree(IList<int?> vals)
+        {
+            if (vals == null || vals.Count == 0)
+                return null;
+
+            var root = new TreeNode(vals[0].Value);
+            var q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            for (int i = 1; i < vals.Count && q.Count > 0; i += 2)
+            {
+                var node = q.Dequeue();
+                if (vals[i] != null)
+                {
+                    node.left = new TreeNode(vals[i].Value);
+                    q.Enqueue(node.left);
+                }
+                if (i+1<vals.Count&&vals[i+1]!=null)
+                {
+                    node.right = new TreeNode(vals[i + 1].Value);
+                    q.Enqueue(node.right);
+                }
+            }
+            return root;
         }
     }
 }
