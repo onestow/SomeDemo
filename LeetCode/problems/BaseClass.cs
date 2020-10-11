@@ -10,7 +10,7 @@ namespace LeetCode.problems
     {
         public static BaseClass GetInst()
         {
-            return new _968();
+            return new _416();
         }
         protected virtual void Assert<T>(T o1, T o2)
         {
@@ -86,6 +86,25 @@ namespace LeetCode.problems
                 }
             }
             return root;
+        }
+    }
+
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int val = 0, ListNode next = null)
+        {
+            this.val = val;
+            this.next = next;
+        }
+
+        public static ListNode BuildList(int[] vals)
+        {
+            ListNode prev = null;
+            for (int i = vals.Length - 1; i >= 0; i--)
+                prev = new ListNode(vals[i], prev);
+            return prev;
         }
     }
 }
